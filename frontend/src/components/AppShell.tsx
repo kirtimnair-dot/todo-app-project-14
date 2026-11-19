@@ -1,0 +1,7 @@
+import { Bell, Menu, Search } from 'lucide-react';
+import { useState, type ReactNode } from 'react';
+import Sidebar from './Sidebar';
+export default function AppShell({ children }: { children: ReactNode }) {
+  const [open, setOpen] = useState(false);
+  return <div className="min-h-screen bg-[#fffaf5] md:flex"><Sidebar open={open} onClose={() => setOpen(false)} /><main className="min-w-0 flex-1"><header className="sticky top-0 z-20 flex h-[76px] items-center gap-4 border-b border-orange-100 bg-[#fffaf5]/90 px-4 backdrop-blur md:px-8"><button onClick={() => setOpen(true)} className="rounded-xl border border-orange-100 p-2 md:hidden"><Menu size={20} /></button><div className="relative max-w-xl flex-1"><Search className="absolute left-4 top-1/2 -translate-y-1/2 text-stone-400" size={18} /><input aria-label="Search tasks" placeholder="Search tasks..." className="field w-full pl-11" onChange={(e) => window.dispatchEvent(new CustomEvent('taskflow-search', { detail: e.target.value }))} /></div><button aria-label="Notifications" className="rounded-xl border border-orange-100 bg-white p-2.5 text-stone-600 hover:text-brand-600"><Bell size={19} /></button><div className="hidden items-center gap-2 sm:flex"><span className="grid h-9 w-9 place-items-center rounded-full bg-[#ffe0bd] text-sm font-bold">N</span><span className="text-sm font-semibold">Namit</span></div></header><div className="mx-auto max-w-[1440px] p-4 md:p-8">{children}</div></main></div>;
+}
