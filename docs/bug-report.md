@@ -1,9 +1,10 @@
 # Bug Report Documentation — TaskFlow To-Do Application
 
-**Document Version:** 1.2.0
+**Document Version:** 2.0.0
 **Project:** To-Do Web Application (TaskFlow)
 **Role:** QA / Testing & Documentation
-**Date:** 2026-11-20
+**QA Engineer / Reporter:** Aayush Achare
+**Date:** 2026-11-21
 
 ---
 
@@ -24,9 +25,9 @@ When an issue is identified during test execution:
 | Severity | Description |
 | :--- | :--- |
 | **Critical** | Application crash, unhandled exception blocking core flow, data loss, or significant security vulnerability. |
-| **Major** | A core feature is completely broken or inaccessible with no workaround. |
-| **Minor** | A non-core feature fails or malfunctions; a workaround exists or the core flow is unaffected. |
-| **Trivial** | Cosmetic issue, minor visual defect, or spelling error that does not affect functionality. |
+| **Major** | A core feature is completely broken, inaccessible, or non-functional with no straightforward workaround. |
+| **Minor** | A non-core feature fails or malfunctions; a workaround exists or the primary user flow remains operational. |
+| **Trivial** | Cosmetic issue, minor visual defect, UI alignment inconsistency, or non-blocking usability flaw. |
 
 ---
 
@@ -34,9 +35,9 @@ When an issue is identified during test execution:
 
 | Priority | Description |
 | :--- | :--- |
-| **High** | Must be resolved before the next release or milestone. |
-| **Medium** | Should be resolved in the current sprint or cycle. |
-| **Low** | Can be deferred; does not block current work. |
+| **High** | Must be resolved before release or milestone completion. |
+| **Medium** | Should be addressed in the current sprint or stabilization cycle. |
+| **Low** | Can be deferred; does not block core task management activities. |
 
 ---
 
@@ -49,7 +50,8 @@ When an issue is identified during test execution:
 | `In Progress` | Fix is actively being developed. |
 | `Resolved` | Fix implemented; awaiting QA retest. |
 | `Closed` | Retest confirmed the fix. |
-| `Reopened` | Defect persists after a previous resolution. |
+| `Reopened` | Defect persists after a previous resolution attempt. |
+| `Cannot Verify (Blocked)` | Retest cannot be completed due to environment or navigational dependency. |
 | `Cannot Reproduce` | Could not be replicated during investigation. |
 | `Won't Fix` | Product decision not to address; or confirmed as intended behavior. |
 
@@ -59,13 +61,19 @@ When an issue is identified during test execution:
 
 | Bug ID | Title | Module | Severity | Priority | Status | Assigned To | Retest Result |
 | :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- |
-| **BUG-001** | Advanced search/filter button does not respond when clicked | Task Management / Search | Minor | Medium | New | Unassigned | Not Retested |
-| **BUG-002** | Notification bell button does not respond when clicked | Header / Notifications | Minor | Low | New | Unassigned | Not Retested |
-| **BUG-003** | Theme color swatches in Settings do not apply any change | Settings / Appearance | Minor | Low | New | Unassigned | Not Retested |
+| **BUG-001** | Advanced search/filter button does not respond when clicked | Tasks / Search | Minor | Medium | Closed | Namit Yadav | Pass (Resolved) |
+| **BUG-002** | Notification bell button does not respond when clicked | Header / Notifications | Minor | Low | Closed | Namit Yadav | Pass (Resolved) |
+| **BUG-003** | Theme color swatches in Settings do not apply any change | Settings / Appearance | Minor | Low | Cannot Verify (Blocked) | Namit Yadav | Blocked (Settings Inaccessible) |
+| **BUG-004** | No visible logout option to terminate session or switch accounts | Authentication / Session | Major | High | New | Unassigned | Fail (Reproduced) |
+| **BUG-005** | Productivity graph displays completed progress data for future days (Saturday & Sunday) | Dashboard / Analytics | Minor | Medium | New | Unassigned | Fail (Reproduced) |
+| **BUG-006** | Alarm "Snooze 5m" permanently dismisses reminder without rescheduling | Alarms / Reminders | Major | High | New | Unassigned | Fail (Reproduced) |
+| **BUG-007** | Settings page is not discoverable or accessible via in-app UI navigation | Navigation / Settings | Minor | Medium | New | Unassigned | Fail (Reproduced) |
+| **BUG-008** | User profile card is missing from primary application interface | UI / Profile | Trivial | Low | New | Unassigned | Fail (Reproduced) |
+| **BUG-009** | No direct in-app navigation link back to Dashboard from other pages | Header / Navigation | Minor | Medium | New | Unassigned | Fail (Reproduced) |
 
 ---
 
-## 6. Individual Bug Reports
+## 6. Retested Existing Defects (BUG-001 through BUG-003)
 
 ---
 
@@ -73,9 +81,9 @@ When an issue is identified during test execution:
 
 - **Bug ID:** BUG-001
 - **Date Reported:** 2026-11-20
-- **Reporter:** *(Not recorded)*
-- **Feature / Module:** Task Management / Search
-- **Environment:** Windows — Desktop Browser
+- **Reporter:** Aayush Achare
+- **Feature / Module:** Task Management / Search & Filters
+- **Environment:** Windows — Desktop Browser (Chrome / Edge)
 - **Associated Test Case:** TC-SEARCH-005
 
 #### Preconditions
@@ -83,29 +91,30 @@ When an issue is identified during test execution:
 
 #### Steps to Reproduce
 1. Navigate to `/tasks`.
-2. Locate the slider/filter icon displayed to the right of the search input field.
-3. Click the icon.
+2. Locate the search bar and filter controls.
+3. Observe available controls for priority and sorting.
 
 #### Expected Result
-The icon should trigger an action, such as opening advanced filter or sort options.
+Filter controls should allow users to filter tasks by priority and sort task rows.
 
-#### Actual Result
-Clicking the icon produces no response. No panel, dropdown, or state change occurs.
+#### Actual Result (Initial Test)
+Clicking the former slider/filter icon produced no action.
+
+#### Retest Finding (Post-Integration Retest)
+**Status: Closed / Resolved.**
+The static icon was removed during the frontend overhaul. The `/tasks` toolbar now includes dedicated, fully functional select dropdowns for **Priority Filter** (`All`, `High`, `Medium`, `Low`) and **Sort By** (`Due Date`, `Priority`, `Recently Added`), both of which update the task list in real time.
 
 #### Severity & Priority
 - **Severity:** Minor
 - **Priority:** Medium
 
-#### Screenshot / Evidence
-- Not recorded. *(Attach screenshot or screen recording if available.)*
-
 #### Assignment & Resolution Tracking
-- **Status:** New
-- **Assigned Developer:** Unassigned
-- **Developer Resolution Notes:** Pending
-- **Retest Result:** Not Retested
-- **Retest Date:** —
-- **Retested By:** —
+- **Status:** Closed
+- **Assigned Developer:** Namit Yadav
+- **Developer Resolution Notes:** Replaced non-functional icon with native responsive `<select>` controls for priority filtering and sorting.
+- **Retest Result:** Pass
+- **Retest Date:** 2026-11-21
+- **Retested By:** Aayush Achare
 
 ---
 
@@ -113,39 +122,40 @@ Clicking the icon produces no response. No panel, dropdown, or state change occu
 
 - **Bug ID:** BUG-002
 - **Date Reported:** 2026-11-20
-- **Reporter:** *(Not recorded)*
+- **Reporter:** Aayush Achare
 - **Feature / Module:** Header / Notifications
 - **Environment:** Windows — Desktop Browser
 - **Associated Test Case:** TC-UI-001
 
 #### Preconditions
-- User is logged in. The top application header is visible.
+- User is logged in and header is visible.
 
 #### Steps to Reproduce
-1. Navigate to any page within the application.
-2. Locate the bell icon button in the top header, to the right of the search bar.
-3. Click the button.
+1. Navigate to any page (`/dashboard`, `/tasks`, `/calendar`).
+2. Locate the bell icon button in the top navigation header.
+3. Click the bell button.
 
 #### Expected Result
-The button should open a notifications panel, dropdown, or at minimum display a placeholder indicating notifications are not yet available.
+The button should trigger a notifications popover displaying upcoming and overdue tasks.
 
-#### Actual Result
-Clicking the button produces no response. No visual change or action occurs.
+#### Actual Result (Initial Test)
+Clicking the button produced no response.
+
+#### Retest Finding (Post-Integration Retest)
+**Status: Closed / Resolved.**
+The bell button is now connected to an interactive notifications popover in `AppShell.tsx` that filters pending tasks due on or before today's date, displaying item counts, task titles, due tags, and a "View all tasks" action link.
 
 #### Severity & Priority
 - **Severity:** Minor
 - **Priority:** Low
 
-#### Screenshot / Evidence
-- Not recorded. *(Attach screenshot or screen recording if available.)*
-
 #### Assignment & Resolution Tracking
-- **Status:** New
-- **Assigned Developer:** Unassigned
-- **Developer Resolution Notes:** Pending
-- **Retest Result:** Not Retested
-- **Retest Date:** —
-- **Retested By:** —
+- **Status:** Closed
+- **Assigned Developer:** Namit Yadav
+- **Developer Resolution Notes:** Implemented stateful `notifOpen` popover with task filtering and click-outside dismissal.
+- **Retest Result:** Pass
+- **Retest Date:** 2026-11-21
+- **Retested By:** Aayush Achare
 
 ---
 
@@ -153,153 +163,326 @@ Clicking the button produces no response. No visual change or action occurs.
 
 - **Bug ID:** BUG-003
 - **Date Reported:** 2026-11-20
-- **Reporter:** *(Not recorded)*
+- **Reporter:** Aayush Achare
 - **Feature / Module:** Settings / Appearance
 - **Environment:** Windows — Desktop Browser
-- **Associated Test Case:** TC-UI-002
+- **Associated Test Case:** TC-THEME-002
 
 #### Preconditions
 - User is logged in and on the Settings page (`/settings`).
 
 #### Steps to Reproduce
-1. Navigate to `/settings`.
-2. Scroll to the **Appearance** section.
-3. Click each of the four color circles displayed.
+1. Attempt to navigate to `/settings`.
+2. Locate the Appearance section and click color swatches.
 
 #### Expected Result
-Selecting a color swatch should update the application's theme or accent color.
+Clicking accent color swatches updates the theme palette.
 
-#### Actual Result
-The color circles do not respond to clicks. No visual change occurs in the application after clicking any swatch.
+#### Actual Result (Initial Test)
+Color circles did not respond to user clicks.
+
+#### Retest Finding (Post-Integration Retest)
+**Status: Cannot Verify (Blocked).**
+Code review confirms `Settings.tsx` now contains functional swatch handlers (`setAccentTheme`) connected to CSS variables (`--accent-primary`, `--accent-hover`, etc.). However, because the Settings page cannot be accessed via in-app UI navigation in the tested environment (see BUG-007), this fix could not be verified end-to-end through manual UI testing.
 
 #### Severity & Priority
 - **Severity:** Minor
 - **Priority:** Low
 
+#### Assignment & Resolution Tracking
+- **Status:** Cannot Verify (Blocked)
+- **Assigned Developer:** Namit Yadav
+- **Developer Resolution Notes:** Swatches implemented with `data-accent` attribute in `Settings.tsx`. Retest blocked pending navigation accessibility fix (BUG-007).
+- **Retest Result:** Blocked
+- **Retest Date:** 2026-11-21
+- **Retested By:** Aayush Achare
+
+---
+
+## 7. New Defect Reports (BUG-004 through BUG-009)
+
+---
+
+### Bug Report: [BUG-004] No visible logout option to terminate session or switch accounts
+
+- **Bug ID:** BUG-004
+- **Date Reported:** 2026-11-21
+- **Reporter:** Aayush Achare
+- **Feature / Module:** Authentication & Session Management
+- **Environment:** Windows — Desktop Browser (Chrome / Edge)
+- **Associated Test Case:** TC-AUTH-006
+
+#### Preconditions
+- User is logged into the application with an active session.
+
+#### Steps to Reproduce
+1. Log into the application using any credentials.
+2. Observe the main application interface, top header, and navigation areas.
+3. Attempt to locate a visible "Logout" or "Sign Out" button to end the session or return to the login screen.
+
+#### Expected Result
+A clearly visible logout option should be accessible in the application navigation or header, allowing the user to safely terminate their session, clear authentication tokens, and return to `/login`.
+
+#### Actual Result
+There is no visible logout option in the header or primary interface. The application automatically retains user authentication in storage, with no discoverable mechanism to log out or switch accounts from the UI.
+
+#### Impact & Severity
+- **Severity:** Major — Prevents users from switching accounts, logging out on shared computers, or verifying different user roles.
+- **Priority:** High — Must be resolved for secure session lifecycle and multi-user testing.
+
 #### Screenshot / Evidence
-- Not recorded. *(Attach screenshot or screen recording if available.)*
+- Session persists across page reloads and tab navigation; no sign-out trigger is visible in the primary navigation layout.
 
 #### Assignment & Resolution Tracking
 - **Status:** New
 - **Assigned Developer:** Unassigned
-- **Developer Resolution Notes:** Pending
-- **Retest Result:** Not Retested
-- **Retest Date:** —
-- **Retested By:** —
+- **Developer Resolution Notes:** Pending investigation. Recommendation: Provide an explicit Sign Out button in the header or top navigation bar.
+- **Retest Result:** Fail (Reproduced)
+- **Retest Date:** 2026-11-21
+- **Retested By:** Aayush Achare
 
 ---
 
-## 7. Unconfirmed Observations & Requirement Clarifications
+### Bug Report: [BUG-005] Productivity graph displays completed progress data for future days (Saturday & Sunday)
 
-The following issues were observed during testing but have not been classified as confirmed bugs. Each item requires further evidence, reproduction steps, or a product/design clarification before it can be promoted to a defect.
+- **Bug ID:** BUG-005
+- **Date Reported:** 2026-11-21
+- **Reporter:** Aayush Achare
+- **Feature / Module:** Dashboard / Productivity Analytics
+- **Environment:** Windows — Desktop Browser
+- **Associated Test Case:** TC-TASK-VIEW-005
 
----
+#### Preconditions
+- User is logged in and viewing the Dashboard (`/dashboard`).
 
-### OBS-001 — Email icon possibly overlaps input text on the login page
+#### Steps to Reproduce
+1. Navigate to `/dashboard`.
+2. Locate the "Your Productivity" weekly momentum chart.
+3. Observe the daily data points along the X-axis for Saturday and Sunday.
 
-**Observed:** The email field icon may visually overlap with the placeholder or typed text in the email input.
-**Needs clarification:** No screenshot was captured. Independent code review indicates sufficient left padding (`pl-11`) is applied to the input. The overlap could not be independently reproduced.
-**Why not a confirmed bug:** Insufficient evidence. If a screenshot demonstrates the overlap in a specific browser or resolution, this should be reopened as a confirmed defect.
+#### Expected Result
+Future days of the week should not display completed productivity progress or completion percentages before those days actually occur.
 
----
+#### Actual Result
+The productivity graph plots progress data and displays completion percentages for Saturday and Sunday even though those days are currently in the future. The chart projects completed productivity values prematurely.
 
-### OBS-002 — Password icon possibly overlaps input text on the login page
+#### Impact & Severity
+- **Severity:** Minor — Misleading dashboard analytics; core task creation and completion remain unaffected.
+- **Priority:** Medium — Should be adjusted to only plot elapsed days or visually distinguish projected vs. actual data.
 
-**Observed:** The password field icon may overlap with the placeholder or typed text in the password input.
-**Needs clarification:** Same as OBS-001. No screenshot captured; not independently reproduced via code review.
-**Why not a confirmed bug:** Insufficient evidence.
+#### Screenshot / Evidence
+- Data points on Saturday and Sunday show positive completion percentages (e.g., 43%, 64%) prior to those calendar dates occurring.
 
----
-
-### OBS-003 — Calendar icon possibly overlaps date text in the task modal
-
-**Observed:** The calendar icon inside the due date field may overlap the selected date text.
-**Needs clarification:** No screenshot captured. Code review shows `pl-11` applied to the date input. Overlap not independently reproduced.
-**Why not a confirmed bug:** Insufficient evidence.
-
----
-
-### OBS-004 — Search icon possibly overlaps search field placeholder text
-
-**Observed:** The magnifying glass icon in the Tasks page search bar may overlap the placeholder text.
-**Needs clarification:** No screenshot captured. The search input is in a flex container where the icon and input are sibling elements, which should prevent overlap. Not independently reproduced.
-**Why not a confirmed bug:** Insufficient evidence.
-
----
-
-### OBS-005 — Dashboard promotional illustration appears cropped
-
-**Observed:** The illustration in the "Stay on Track" card on the Dashboard appeared cropped during testing.
-**Needs clarification:** Code review shows `object-contain` is applied to the image, which preserves aspect ratio without cropping. The appearance may differ across screen sizes or browsers.
-**Why not a confirmed bug:** Could not be independently reproduced. Attach a screenshot to confirm.
+#### Assignment & Resolution Tracking
+- **Status:** New
+- **Assigned Developer:** Unassigned
+- **Developer Resolution Notes:** In `ProductivityChart.tsx`, dynamically compare point days against the current day of the week and clamp future day values to 0 or render them as dashed projected lines.
+- **Retest Result:** Fail (Reproduced)
+- **Retest Date:** 2026-11-21
+- **Retested By:** Aayush Achare
 
 ---
 
-### OBS-006 — Bottom-left sidebar profile card does not respond when clicked
+### Bug Report: [BUG-006] Alarm "Snooze 5m" permanently dismisses reminder without rescheduling
 
-**Observed:** Clicking the user profile card at the bottom of the sidebar (showing user name and "Personal workspace") produces no action.
-**Needs clarification:** Code review shows the card container (`<div>`) is intentionally non-interactive. The only active control within it is the logout button. This appears to be display-only.
-**Why not a confirmed bug:** Behavior appears intentional. No requirement or design specification indicates this area should open a menu. Confirm with the development team if a profile menu is planned.
+- **Bug ID:** BUG-006
+- **Date Reported:** 2026-11-21
+- **Reporter:** Aayush Achare
+- **Feature / Module:** Notifications & Reminders / Alarm Overlay
+- **Environment:** Windows — Desktop Browser
+- **Associated Test Case:** TC-ALARM-002
+
+#### Preconditions
+- A task is created with a due time matching the current time, triggering an active alarm.
+
+#### Steps to Reproduce
+1. Wait for the alarm to trigger with audio chime and the "Task Alarm Ringing" modal.
+2. In the modal, click the **Snooze 5m** button.
+3. Observe that the modal closes and audio stops.
+4. Wait 5 minutes for the snoozed reminder to trigger again.
+
+#### Expected Result
+Clicking "Snooze 5m" should reschedule the alarm due time by +5 minutes, and the alarm should ring again when the snoozed time is reached.
+
+#### Actual Result
+The alarm is dismissed permanently. After 5 minutes, no alarm triggers, and no reminder notification appears. The Snooze button effectively functions as a Dismiss action rather than a rescheduling tool.
+
+#### Impact & Severity
+- **Severity:** Major — Snooze feature fails its primary purpose of re-alerting the user, potentially causing missed deadlines.
+- **Priority:** High — Timed reminders are a key advertised productivity feature.
+
+#### Screenshot / Evidence
+- Alarm closes on clicking Snooze; no secondary alarm fires after 5 minutes elapsed.
+
+#### Assignment & Resolution Tracking
+- **Status:** New
+- **Assigned Developer:** Unassigned
+- **Developer Resolution Notes:** Inspect `snoozeAlarm` in `TaskContext.tsx`. Ensure the snoozed task due time updates correctly in storage and that previously fired alarm keys (`loadFiredAlarmKeys`) do not block the newly rescheduled time.
+- **Retest Result:** Fail (Reproduced)
+- **Retest Date:** 2026-11-21
+- **Retested By:** Aayush Achare
 
 ---
 
-### OBS-007 — Past dates can be selected as task due dates
+### Bug Report: [BUG-007] Settings page is not discoverable or accessible via in-app UI navigation
 
-**Observed:** The due date input does not restrict the user to future dates; past dates can be selected.
-**Needs clarification:** No requirement specifying that past dates must be prohibited has been identified. Past dates may be valid for recording overdue tasks or historical entries.
-**Why not a confirmed bug:** Requires product confirmation on whether future-only dates are a requirement.
+- **Bug ID:** BUG-007
+- **Date Reported:** 2026-11-21
+- **Reporter:** Aayush Achare
+- **Feature / Module:** Navigation / Settings
+- **Environment:** Windows — Desktop Browser
+- **Associated Test Case:** TC-UI-002
+
+#### Preconditions
+- User is logged into the application.
+
+#### Steps to Reproduce
+1. Navigate through the primary views of the application.
+2. Inspect the visible navigation controls, header, and available menus.
+3. Look for a link, icon, or menu item to access Settings.
+
+#### Expected Result
+A visible navigation link (e.g., "Settings" in the primary navigation or header) should allow users to open `/settings` to manage preferences, appearance, and profile data.
+
+#### Actual Result
+The Settings page cannot be found or accessed from the visible user interface. Users are unaware that `/settings` exists unless they manually enter the route into the browser address bar.
+
+#### Impact & Severity
+- **Severity:** Minor — Prevents users from accessing profile preferences, theme swatches, and workspace settings through normal navigation.
+- **Priority:** Medium — Usability and discoverability defect.
+
+#### Screenshot / Evidence
+- Visible navigation lacks a persistent or accessible Settings button in standard viewport configurations.
+
+#### Assignment & Resolution Tracking
+- **Status:** New
+- **Assigned Developer:** Unassigned
+- **Developer Resolution Notes:** Ensure Settings is exposed as a primary navigation item in the header or persistent navigation bar.
+- **Retest Result:** Fail (Reproduced)
+- **Retest Date:** 2026-11-21
+- **Retested By:** Aayush Achare
 
 ---
 
-### OBS-008 — Display name in Settings cannot be edited
+### Bug Report: [BUG-008] User profile card is missing from primary application interface
 
-**Observed:** The Profile section in Settings displays the user's name as static text with no edit option.
-**Needs clarification:** The application is currently a client-side demo without a user account management backend. It is unclear whether editable profile settings are planned for the demo build or deferred to backend integration.
-**Why not a confirmed bug:** The read-only display may be intentional for the current demo scope. Confirm with the team.
+- **Bug ID:** BUG-008
+- **Date Reported:** 2026-11-21
+- **Reporter:** Aayush Achare
+- **Feature / Module:** UI / User Profile
+- **Environment:** Windows — Desktop Browser
+- **Associated Test Case:** TC-UI-003
+
+#### Preconditions
+- User is logged into the application.
+
+#### Steps to Reproduce
+1. View the main application screens (`/dashboard`, `/tasks`, `/calendar`).
+2. Look for a user profile card, user avatar, or user identification section.
+
+#### Expected Result
+The user interface should display a profile card or user badge showing the logged-in user's name, email, avatar, or role.
+
+#### Actual Result
+The user profile section is missing or hidden from the primary interface, leaving the user without confirmation of who is currently signed in.
+
+#### Impact & Severity
+- **Severity:** Trivial — Non-blocking visual/informational defect.
+- **Priority:** Low — Does not impair task CRUD operations.
+
+#### Screenshot / Evidence
+- Interface displays application brand and navigation, but omits a visible user identity card in the main view.
+
+#### Assignment & Resolution Tracking
+- **Status:** New
+- **Assigned Developer:** Unassigned
+- **Developer Resolution Notes:** Display user avatar, display name, and role badge in the top navigation header.
+- **Retest Result:** Fail (Reproduced)
+- **Retest Date:** 2026-11-21
+- **Retested By:** Aayush Achare
 
 ---
 
-### OBS-009 — Dashboard layout appears inconsistent in some areas
+### Bug Report: [BUG-009] No direct in-app navigation link back to Dashboard from other pages
 
-**Observed:** Some elements on the Dashboard appeared to have inconsistent alignment during manual testing.
-**Needs clarification:** No specific element or layout coordinates were recorded. No design specification or Figma reference was available to confirm whether the layout deviates from the intended design.
-**Why not a confirmed bug:** Insufficient specifics to classify as a defect. Flagged for UI/UX design review.
+- **Bug ID:** BUG-009
+- **Date Reported:** 2026-11-21
+- **Reporter:** Aayush Achare
+- **Feature / Module:** Header / Navigation
+- **Environment:** Windows — Desktop Browser
+- **Associated Test Case:** TC-NAV-001
+
+#### Preconditions
+- User is logged in and has navigated to `/tasks` or `/calendar`.
+
+#### Steps to Reproduce
+1. From Dashboard, click into **My Tasks** or **Calendar**.
+2. Once on the new page, look for an in-app button or breadcrumb to navigate back to the Dashboard.
+
+#### Expected Result
+A visible "Dashboard" or "Home" navigation link should be continuously accessible in the interface header to return to the dashboard overview.
+
+#### Actual Result
+There is no visible in-app link to return to the Dashboard. The user is forced to manually edit the browser URL back to `/dashboard` or use browser back/forward buttons.
+
+#### Impact & Severity
+- **Severity:** Minor — Degrades navigation convenience and workflow fluidity.
+- **Priority:** Medium — Core navigation path between dashboard and task list should be seamless.
+
+#### Screenshot / Evidence
+- When viewing `/tasks`, no visible button or link to Dashboard is displayed in the view.
+
+#### Assignment & Resolution Tracking
+- **Status:** New
+- **Assigned Developer:** Unassigned
+- **Developer Resolution Notes:** Add persistent "Dashboard" and "My Tasks" navigation pills/links in the top header.
+- **Retest Result:** Fail (Reproduced)
+- **Retest Date:** 2026-11-21
+- **Retested By:** Aayush Achare
 
 ---
 
-### OBS-010 — Task priority label not visible on Dashboard task cards
+## 8. Unconfirmed Observations & QA Testing Limitations
 
-**Observed:** Priority badges visible on the My Tasks page do not appear on the Recent Tasks list in the Dashboard.
-**Needs clarification:** The Dashboard's Recent Tasks rows use the same `TaskRow` component as My Tasks. Priority badges are present in the component but may be hidden on small card sizes. It is unclear whether this is an intentional responsive design decision.
-**Why not a confirmed bug:** Requires confirmation from the design team on whether priority should be visible on the Dashboard task list.
+The following items are documented for design, requirement clarification, or testing limitation context:
 
 ---
 
-## 8. Confirmed Non-Defect Behaviors
+### OBS-001 — Due date input allows selecting dates in the past
+- **Observed:** Task modal allows selection of historical dates.
+- **Clarification:** May be intentional for logging overdue or back-dated tasks. Requires product owner confirmation.
 
-The following behaviors were investigated and confirmed as intentional.
+### OBS-002 — Bulk task actions limited to "Clear Completed"
+- **Observed:** No multi-select checkboxes for batch deleting or batch editing tasks.
+- **Clarification:** Current scope supports single-task actions plus "Clear Completed". Bulk selection is a potential future enhancement.
+
+### OBS-003 — Admin panel and RBAC features cannot be validated live via UI
+- **Observed:** The application UI does not provide an account switcher or visible logout mechanism (BUG-004), preventing the QA engineer from logging into the seeded administrator account (`admin@todoapp.com`) to verify `/admin` functionality live in the browser.
+- **Clarification:** Code review of `App.tsx` and `backend/routes/admin_routes.py` confirms that administrative endpoints and role guards are implemented. This is a testing/session access limitation resulting from the missing logout feature, not confirmed evidence of broken backend RBAC logic. Formally recorded as `Blocked` in test cases `TC-ADMIN-001` and `TC-ADMIN-002`.
+
+---
+
+## 9. Confirmed Non-Defect Behaviors
 
 | # | Behavior | Reason |
 | :--- | :--- | :--- |
-| 1 | Login accepts any email and password | The login page explicitly states: *"Demo app · Any email and password will work."* This is intentional demo behavior, not a defect. |
-| 2 | Tasks are stored in browser LocalStorage only | The Settings page explicitly states: *"This demo stores task data in this browser using LocalStorage."* This is documented, intentional behavior. |
-| 3 | Admin section is inaccessible | No admin UI exists in the current frontend build. Admin functionality is planned but not yet implemented. |
+| 1 | Offline `localStorage` Fallback | When the local Flask API is unreachable, the frontend automatically falls back to browser storage. This is an intentional resilience feature to ensure the UI remains usable without a live server. |
+| 2 | Password Length Requirement | Registration requires passwords to have a minimum length of 8 characters, enforced consistently across frontend and backend (`backend/routes/auth_routes.py`). |
+| 3 | Single-Task Inline Quick Add | The Quick Add bar on `/tasks` creates a single task with today's date and default priority upon pressing Enter; this is designed for rapid entry and operates as intended. |
 
 ---
 
-## 9. Reusable Bug Report Template
-
-> Copy this template for each new defect discovered during testing.
+## 10. Reusable Bug Report Template
 
 ```markdown
 ### Bug Report: [BUG-XXX] <Short, descriptive title>
 
 - **Bug ID:** BUG-
 - **Date Reported:** YYYY-MM-DD
-- **Reporter:**
+- **Reporter:** Aayush Achare
 - **Feature / Module:**
 - **Environment:** OS — Browser & Version
-- **Associated Test Case:** [e.g., TC-SEARCH-005 or Exploratory]
+- **Associated Test Case:**
 
 #### Preconditions
 -
@@ -320,7 +503,7 @@ The following behaviors were investigated and confirmed as intentional.
 - **Priority:** [High | Medium | Low]
 
 #### Screenshot / Evidence
-- [Attach or write "Not recorded"]
+- [Attach screenshot, log output, or write "Not recorded"]
 
 #### Assignment & Resolution Tracking
 - **Status:** New
