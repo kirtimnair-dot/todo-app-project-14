@@ -1,11 +1,67 @@
-import { Navigate, Route, Routes } from 'react-router-dom';
-import type { ReactNode } from 'react';
-import AppShell from './components/AppShell';
-import { TaskProvider } from './context/TaskContext';
-import Calendar from './pages/Calendar';
-import Dashboard from './pages/Dashboard';
-import Login from './pages/Login';
-import Settings from './pages/Settings';
-import Tasks from './pages/Tasks';
-function Protected({ children }: { children: ReactNode }) { return localStorage.getItem('taskflow.user') ? <AppShell>{children}</AppShell> : <Navigate to="/login" replace />; }
-export default function App() { return <TaskProvider><Routes><Route path="/login" element={<Login/>}/><Route path="/" element={<Protected><Dashboard/></Protected>}/><Route path="/tasks" element={<Protected><Tasks/></Protected>}/><Route path="/calendar" element={<Protected><Calendar/></Protected>}/><Route path="/settings" element={<Protected><Settings/></Protected>}/><Route path="*" element={<Navigate to="/" replace/>}/></Routes></TaskProvider>; }
+import React from 'react';
+import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
+import { TaskProvider, useTasks } from './context/TaskContext';
+import { AppShell } from './components/AppShell';
+import { Login } from './pages/Login';
+import { Dashboard } from './pages/Dashboard';
+import { Tasks } from './pages/Tasks';
+import { Calendar } from './pages/Calendar';
+import { Admin } from './pages/Admin';
+import { Settings } from './pages/Settings';
+
+function ProtectedRoute({ children }: { children: React.ReactNode }) {
+  const { user } = useTasks();
+  if (!user) {
+    return <Navigate to="/login" replace />;
+  }
+  return <>{children}</>;
+}
+
+function AdminRoute({ children }: { children: React.ReactNode }) {
+  const { user } = useTasks();
+  if (!user) {
+    return <Navigate to="/login" replace />;
+  }
+  if (user.role !== 'admin') {
+    return <Navigate to="/dashboard" replace />;
+  }
+  return <>{children}</>;
+}
+
+function DefaultRedirect() {
+  const { user } = useTasks();
+  return <Navigate to={user ? '/dashboard' : '/login'} replace />;
+}
+
+export default function App() {
+  return (
+    <TaskProvider>
+      <BrowserRouter>
+        <Routes>
+          <Route path="/login" element={<Login />} />
+          <Route
+            element={
+              <ProtectedRoute>
+                <AppShell />
+              </ProtectedRoute>
+            }
+          >
+            <Route path="/dashboard" element={<Dashboard />} />
+            <Route path="/tasks" element={<Tasks />} />
+            <Route path="/calendar" element={<Calendar />} />
+            <Route
+              path="/admin"
+              element={
+                <AdminRoute>
+                  <Admin />
+                </AdminRoute>
+              }
+            />
+            <Route path="/settings" element={<Settings />} />
+          </Route>
+          <Route path="*" element={<DefaultRedirect />} />
+        </Routes>
+      </BrowserRouter>
+    </TaskProvider>
+  );
+}
