@@ -63,20 +63,21 @@ A collaborative full-stack To-Do Web Application built with a **React + TypeScri
 │   ├── schema.sql            # todo_app database, users & tasks tables (InnoDB, utf8mb4)
 │   └── seed.sql              # Seeded admin & user accounts + sample tasks
 ├── docs/                     # QA & UI/UX documentation
-│   ├── bug-report.md         # Defect log & bug reports
-│   ├── test-cases.md         # Functional, RBAC & integration test cases
+│   ├── bug-report.md         # Defect log & bug reports (v2.0.0)
+│   ├── test-cases.md         # Functional, RBAC & integration test cases (v2.0.0)
 │   └── ui-ux/                # Style guide & wireframes
-├── public/                   # Static assets (favicon.svg)
-├── src/                      # React + TypeScript + Vite frontend
-│   ├── components/           # AppShell, Sidebar, TaskModal, TaskRow, AlarmOverlay, ProductivityChart
-│   ├── context/              # TaskContext (JWT auth, Flask API + offline fallback, alarm scheduler, theme)
-│   ├── lib/                  # api.ts, alarm.ts, storage.ts, date.ts
-│   ├── pages/                # Login, Dashboard, Tasks, Calendar, Admin, Settings
-│   ├── types/                # Shared TypeScript interfaces
-│   ├── App.tsx               # Route configuration & User/Admin guards
-│   └── index.css             # Tailwind CSS v4 theme & accent overrides
-├── .env.example              # Frontend environment variables template
-├── package.json              # Frontend dependencies & scripts
+├── frontend/                 # React + TypeScript + Vite frontend
+│   ├── public/               # Static assets (favicon.svg)
+│   ├── src/                  # Application source code
+│   │   ├── components/       # AppShell, Sidebar, TaskModal, TaskRow, AlarmOverlay, ProductivityChart
+│   │   ├── context/          # TaskContext (JWT auth, Flask API + offline fallback, alarm scheduler, theme)
+│   │   ├── lib/              # api.ts, alarm.ts, storage.ts, date.ts
+│   │   ├── pages/            # Login, Dashboard, Tasks, Calendar, Admin, Settings
+│   │   ├── types/            # Shared TypeScript interfaces
+│   │   ├── App.tsx           # Route configuration & User/Admin guards
+│   │   └── index.css         # Tailwind CSS v4 theme & accent overrides
+│   ├── .env.example          # Frontend environment variables template
+│   └── package.json          # Frontend dependencies & scripts
 └── README.md                 # Project overview & setup documentation
 ```
 
@@ -96,10 +97,13 @@ mysql -u root -p < database/schema.sql
 mysql -u root -p < database/seed.sql
 ```
 
-**Seeded Accounts** (password for all: `Password123!`):
+**Seeded Accounts** (default password for local testing: `Password123!`):
 - **Admin**: `admin@todoapp.com` (`role: admin`)
 - **User**: `jane.doe@example.com` (`role: user`)
 - **User**: `john.smith@example.com` (`role: user`)
+
+> [!WARNING]
+> **Security Notice**: Seeded accounts and default credentials (`Password123!`) are strictly intended for local development, staging, and functional testing. Never use these credentials in a public or production environment.
 
 ### 2. Backend Setup (Flask API)
 
@@ -128,18 +132,20 @@ The backend API runs at `http://127.0.0.1:5000`.
 
 ### 3. Frontend Setup (React + Vite)
 
-From the project root (or `frontend/` directory):
+From the `frontend/` directory:
 ```bash
+cd frontend
 npm install
 cp .env.example .env
 # Optional: set VITE_API_BASE_URL="http://127.0.0.1:5000"
 npm run dev
 ```
 
-The frontend runs at `http://localhost:3000`. If the Flask server is not running locally, the frontend automatically falls back to browser `localStorage` so all UI features remain usable.
+The frontend runs at `http://localhost:5173` (or configured Vite port). If the Flask server is not running locally, the frontend automatically falls back to browser `localStorage` so all UI features remain usable.
 
 ### Build & Type Check
 ```bash
+cd frontend
 npm run lint    # TypeScript check (tsc --noEmit)
 npm run build   # Production Vite build
 ```
@@ -165,8 +171,25 @@ npm run build   # Production Vite build
 
 ---
 
-## Documentation & QA
+## QA Testing Status & Known Issues
 
+Testing was conducted across the integrated codebase. Core frontend task workflows (CRUD, search, priority filter, sorting, calendar, alarms) were manually executed in desktop browsers. Integration tests and administrative live verification remain formally documented as `Blocked` due to local backend runtime constraints and session account-switching limitations.
+
+### Defect Tracking Summary
+
+| Bug ID | Title | Severity | Priority | Status |
+| :--- | :--- | :--- | :--- | :--- |
+| **BUG-001** | Advanced search/filter button unresponsive | Minor | Medium | **Closed / Resolved** |
+| **BUG-002** | Notification bell button unresponsive | Minor | Low | **Closed / Resolved** |
+| **BUG-003** | Theme swatches in Settings do not apply | Minor | Low | **Cannot Verify (Blocked)** |
+| **BUG-004** | No visible logout option to terminate session | Major | High | **New (Open)** |
+| **BUG-005** | Productivity chart displays future day data | Minor | Medium | **New (Open)** |
+| **BUG-006** | Alarm Snooze permanently dismisses reminder | Major | High | **New (Open)** |
+| **BUG-007** | Settings page not discoverable in UI navigation | Minor | Medium | **New (Open)** |
+| **BUG-008** | Profile card missing from primary interface | Trivial | Low | **New (Open)** |
+| **BUG-009** | No in-app navigation link back to Dashboard | Minor | Medium | **New (Open)** |
+
+For full test scenarios, steps to reproduce, and resolution notes, see:
 - **Test Cases**: [`docs/test-cases.md`](docs/test-cases.md)
 - **Bug Report**: [`docs/bug-report.md`](docs/bug-report.md)
 - **UI/UX Style Guide**: [`docs/ui-ux/style-guide.md`](docs/ui-ux/style-guide.md)
