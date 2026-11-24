@@ -17,7 +17,7 @@ INSERT INTO users (id, name, email, password_hash, role, created_at) VALUES
     1,
     'Admin User',
     'admin@todoapp.com',
-    '$2b$12$eCw6w67yV3Ny6nK4O3c4beY7M/J4HkWqQ5k8L1k3N9m8P5d0a1b2c',
+    '$2b$12$Eu0fj1Zog2ZY2j.ddUmuGeaj/sxB.nAbvMUVAMxzlKx0bAMWmffF2',
     'admin',
     NOW() - INTERVAL 30 DAY
 ),
@@ -25,7 +25,7 @@ INSERT INTO users (id, name, email, password_hash, role, created_at) VALUES
     2,
     'Jane Doe',
     'jane.doe@example.com',
-    '$2b$12$eCw6w67yV3Ny6nK4O3c4beY7M/J4HkWqQ5k8L1k3N9m8P5d0a1b2c',
+    '$2b$12$Eu0fj1Zog2ZY2j.ddUmuGeaj/sxB.nAbvMUVAMxzlKx0bAMWmffF2',
     'user',
     NOW() - INTERVAL 14 DAY
 ),
@@ -33,7 +33,7 @@ INSERT INTO users (id, name, email, password_hash, role, created_at) VALUES
     3,
     'John Smith',
     'john.smith@example.com',
-    '$2b$12$eCw6w67yV3Ny6nK4O3c4beY7M/J4HkWqQ5k8L1k3N9m8P5d0a1b2c',
+    '$2b$12$Eu0fj1Zog2ZY2j.ddUmuGeaj/sxB.nAbvMUVAMxzlKx0bAMWmffF2',
     'user',
     NOW() - INTERVAL 7 DAY
 )

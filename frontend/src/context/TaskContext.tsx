@@ -351,9 +351,10 @@ export function TaskProvider({ children }: { children: React.ReactNode }) {
     const normalizedTime = draft.dueTime?.trim() || undefined;
     const normalizedAlarm = Boolean(normalizedTime && draft.alarmEnabled !== false);
     try {
-      if (apiMode === 'live' && token && !token.startsWith('offline-')) {
+      if (token && !token.startsWith('offline-')) {
         try {
           const created = await apiCreateTask(token, draft);
+          setApiMode('live');
           setTaskReminder(created.id, {
             dueTime: normalizedTime,
             alarmEnabled: normalizedAlarm,
@@ -397,7 +398,7 @@ export function TaskProvider({ children }: { children: React.ReactNode }) {
     const normalizedTime = draft.dueTime?.trim() || undefined;
     const normalizedAlarm = Boolean(normalizedTime && draft.alarmEnabled !== false);
     try {
-      if (apiMode === 'live' && token && !token.startsWith('offline-')) {
+      if (token && !token.startsWith('offline-')) {
         try {
           await apiUpdateTask(token, id, {
             title: draft.title,
@@ -405,6 +406,7 @@ export function TaskProvider({ children }: { children: React.ReactNode }) {
             priority: draft.priority,
             dueDate: draft.dueDate,
           });
+          setApiMode('live');
         } catch (err) {
           if (err instanceof ApiError && !err.isNetworkError) {
             throw err;
@@ -438,11 +440,14 @@ export function TaskProvider({ children }: { children: React.ReactNode }) {
   };
 
   const deleteTask = async (id: string) => {
-    if (apiMode === 'live' && token && !token.startsWith('offline-')) {
+    if (token && !token.startsWith('offline-')) {
       try {
         await apiDeleteTask(token, id);
-      } catch {
-        // Proceed with local update if network drops
+        setApiMode('live');
+      } catch (err) {
+        if (err instanceof ApiError && !err.isNetworkError) {
+          throw err;
+        }
       }
     }
     removeTaskReminder(id);
@@ -470,11 +475,14 @@ export function TaskProvider({ children }: { children: React.ReactNode }) {
       )
     );
 
-    if (apiMode === 'live' && token && !token.startsWith('offline-')) {
+    if (token && !token.startsWith('offline-')) {
       try {
         await apiUpdateTask(token, id, { completed: nextCompleted });
-      } catch {
-        // Revert if server rejects
+        setApiMode('live');
+      } catch (err) {
+        if (err instanceof ApiError && !err.isNetworkError) {
+          throw err;
+        }
       }
     }
   };
@@ -482,8 +490,13 @@ export function TaskProvider({ children }: { children: React.ReactNode }) {
   const clearCompleted = async () => {
     const completedIds = tasks.filter((t) => t.completed).map((t) => t.id);
     setTasks((prev) => prev.filter((task) => !task.completed));
-    if (apiMode === 'live' && token && !token.startsWith('offline-')) {
-      await Promise.allSettled(completedIds.map((id) => apiDeleteTask(token, id)));
+    if (token && !token.startsWith('offline-')) {
+      try {
+        await Promise.allSettled(completedIds.map((id) => apiDeleteTask(token, id)));
+        setApiMode('live');
+      } catch {
+        // ignore
+      }
     }
   };
 

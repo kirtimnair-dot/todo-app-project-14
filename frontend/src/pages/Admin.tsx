@@ -40,7 +40,7 @@ export function Admin() {
     setLoading(true);
     setFeedback('');
 
-    if (apiMode === 'live' && token && !token.startsWith('offline-')) {
+    if (token && !token.startsWith('offline-')) {
       try {
         const [fetchedStats, fetchedUsers, fetchedTasks] = await Promise.all([
           apiAdminGetStats(token),
@@ -83,7 +83,7 @@ export function Admin() {
     if (targetUser.role === nextRole) return;
     setFeedback('');
 
-    if (apiMode === 'live' && token && !token.startsWith('offline-')) {
+    if (token && !token.startsWith('offline-')) {
       try {
         await apiAdminUpdateUserRole(token, targetUser.id, nextRole);
       } catch (err) {
@@ -107,7 +107,7 @@ export function Admin() {
     }
     setFeedback('');
 
-    if (apiMode === 'live' && token && !token.startsWith('offline-')) {
+    if (token && !token.startsWith('offline-')) {
       try {
         await apiAdminDeleteUser(token, targetUser.id);
       } catch (err) {

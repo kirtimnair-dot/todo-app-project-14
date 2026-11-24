@@ -34,6 +34,13 @@ export default defineConfig(() => {
       },
     },
     server: {
+      port: 3000,
+      proxy: {
+        '/api': {
+          target: 'http://127.0.0.1:5000',
+          changeOrigin: true,
+        },
+      },
       // HMR can be disabled via DISABLE_HMR=true when needed.
       hmr: process.env.DISABLE_HMR !== 'true',
       // Disable file watching when DISABLE_HMR is true to reduce CPU overhead.

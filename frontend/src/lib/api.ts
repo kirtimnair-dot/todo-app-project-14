@@ -73,7 +73,20 @@ async function request<T>(
       headers,
     });
   } catch {
-    throw new ApiError('Unable to reach backend API server.', 0, true);
+    // If direct connection to API_BASE_URL failed (e.g. localhost vs 127.0.0.1 CORS/PNA preflight),
+    // attempt relative path via Vite dev server proxy
+    if (API_BASE_URL && typeof window !== 'undefined' && API_BASE_URL !== window.location.origin) {
+      try {
+        response = await fetch(path, {
+          ...options,
+          headers,
+        });
+      } catch {
+        throw new ApiError('Unable to reach backend API server.', 0, true);
+      }
+    } else {
+      throw new ApiError('Unable to reach backend API server.', 0, true);
+    }
   }
 
   let data: Record<string, unknown> = {};
@@ -144,7 +157,7 @@ export async function apiCreateTask(token: string, draft: TaskDraft): Promise<Ta
       method: 'POST',
       body: JSON.stringify({
         title: draft.title.trim(),
-        description: draft.notes?.trim() || '',
+        description: draft.notes?.trim() || null,
         priority: draft.priority.toLowerCase(),
         due_date: draft.dueDate || null,
       }),
@@ -167,7 +180,7 @@ export async function apiUpdateTask(
 ): Promise<void> {
   const payload: Record<string, unknown> = {};
   if (updates.title !== undefined) payload.title = updates.title.trim();
-  if (updates.notes !== undefined) payload.description = updates.notes.trim();
+  if (updates.notes !== undefined) payload.description = updates.notes.trim() || null;
   if (updates.priority !== undefined) payload.priority = updates.priority.toLowerCase();
   if (updates.dueDate !== undefined) payload.due_date = updates.dueDate || null;
   if (updates.completed !== undefined) {
